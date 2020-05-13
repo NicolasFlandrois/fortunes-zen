@@ -6,9 +6,8 @@ import os
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime as dt
-import tweepy
 import pandas as pd
-from sqlalchemy import create_engine
+import tweepy
 
 # print(f'\nTime :\t{dt.now()}\n\nTwitter Script starting. Please wait.')
 
@@ -92,7 +91,6 @@ def new_fortunes(source_dataframe, tweet_input: list):
 new_fortunes(fortune2dataframe('zen'), None)
 
 
-
 ##############################################################################
 #                                Variables                                   #
 ##############################################################################
@@ -171,6 +169,11 @@ if __name__ == "__main__":
 # Checkpoints
 # X 1/ Check the text from that username 's twitter
 # 2/ Clean & Standardize the tweet txt data
+#       a/ remove quotation marks (All kind)
+#       b/ remove '\n'
+#       c/ IGNORE data containing "https://" > Thoses data are useless, quote isn't completed
+#       d/ remove unwanted caracters, trailing symboles
+#       e/ Split quote/author
 # X 3/ Download zen fortunes data from source file >> Use Pandas
 # 4/ Check if new quote already exist in my DB (DB from n° 3)
 # 5/ Append the DB

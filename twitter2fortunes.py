@@ -1,15 +1,16 @@
 #!/usr/bin/python3
+# -*- coding: UTF8 -*-
+# Author: Nicolas Flandrois
 # Date: Monday, May 11rd, 2020
 # https://tweepy.readthedocs.io/en/latest/
-# This version is ready to be used in a CRONTAB schedule
+# This version is ready & destined to be used in a CRONTAB schedule
+
 import os
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime as dt
 import pandas as pd
 import tweepy
-
-# print(f'\nTime :\t{dt.now()}\n\nTwitter Script starting. Please wait.')
 
 
 def send_email(from_addr, gmail_key,
@@ -86,7 +87,8 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     source_df = source_dataframe
 
     # Managing New Data
-    clean_hashtag = [item.split('#')[0] for item in tweet_input]  # Removing twiter plague of #Hashtags
+    # Removing twiter plague of #Hashtags
+    clean_hashtag = [item.split('#')[0] for item in tweet_input]
     new_df = pd.DataFrame([item.replace('"', '').replace(
         'ﾟ', '').replace('\n', '').strip().split(
         '     — ') for item in clean_hashtag], columns=['Quotes', 'Authors'])
@@ -98,15 +100,15 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     concat_df.drop_duplicates(
         subset=['Quotes'], inplace=True, keep=False)
 
-    # Export to txt fortunes format file
+    # Export to txt fortune-mod format file
     quotes_string = "\n%\n".join([
         f'{n[0]}\n\n     — {n[1]}' for n in concat_df.values.tolist()])
 
     with open(output_file_name, "w") as f:
         f.write(f'%\n{quotes_string}\n%')
 
-    concat_rows = concat_df['Quotes'].count()
-    source_rows = source_df['Quotes'].count()
+    concat_rows = int(concat_df['Quotes'].count())
+    source_rows = int(source_df['Quotes'].count())
 
     return int(concat_rows - source_rows)
 
@@ -159,6 +161,9 @@ body_html_failed = f"""<!DOCTYPE html>
     </body>
 </html>"""
 
+# Source File - Data text file in fortune-mod format
+source_file = 'zen'
+
 ##############################################################################
 #                              End of Variables                              #
 ##############################################################################
@@ -166,8 +171,8 @@ body_html_failed = f"""<!DOCTYPE html>
 
 if __name__ == "__main__":
 
-    delta = new_fortunes(fortune2dataframe('zen'), twtr_bot(API_Key, API_Secret_Key, AccessToken,
-                                                            AccessTokenSecret, usernames_list), 'zen')
+    delta = new_fortunes(fortune2dataframe(source_file), twtr_bot(API_Key, API_Secret_Key, AccessToken,
+                                                                  AccessTokenSecret, usernames_list), source_file)
 
     if delta == 0:
         send_email(from_addr, gmail_key, to_addrs,
@@ -186,4 +191,4 @@ if __name__ == "__main__":
         send_email(from_addr, gmail_key, to_addrs,
                    subject_success, msg_success, body_html_success)
 
-    os.system('strfile zen')
+    os.system(f'strfile {source_file}')

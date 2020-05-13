@@ -66,3 +66,10 @@ This program is intended for private uses.
     The output file will be *my_zen_quotes.dat*
 
 5. Then repeate steps in installation section.
+
+-------------------------------------
+# Automated zen update bot
+
+As I sourced all my quotes from a single source, with possible access through an API, I created a bot.
+The `twitter2fortunes.py` script will automate the update for me.
+It will fetch the new quotes, clean the data, compare and purge duplicates, and update the `zen` text file and the `zen.dat` file.

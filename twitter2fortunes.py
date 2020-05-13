@@ -185,3 +185,5 @@ if __name__ == "__main__":
 
         send_email(from_addr, gmail_key, to_addrs,
                    subject_success, msg_success, body_html_success)
+
+    os.system('strfile zen')

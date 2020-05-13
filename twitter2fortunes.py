@@ -67,8 +67,8 @@ def fortune2dataframe(source_file):
     with open(source_file, 'r') as f:
         data = f.read()
         quote_list = data.replace('\n', '').split('%')
-        clean_list = [x for x in quote_list if x]
-        splited_quotes = [str(n).split('    — ') for n in clean_list]
+        clean_list = [x.strip() for x in quote_list if x]
+        splited_quotes = [n.split('    — ') for n in clean_list]
 
         df = pd.DataFrame(splited_quotes, columns=['Quotes', 'Authors'])
 
@@ -81,19 +81,30 @@ def new_fortunes(source_dataframe, tweet_input: list):
     before comparing if the same input already exist in the database.
     The format Used here is specific for a specific source, from '@ZenProverbs'
     twitter Zen quotation bot."""
-    df = source_dataframe
-    print(df)
+    source_df = source_dataframe
+
+    new_data = tweet_input
+    clean_quotes = [item.replace('"', '').replace(
+        'ﾟ', '').replace('\n', '').replace(
+        '#', "- ").strip().split('      — ') for item in new_data]
+    new_df = pd.DataFrame(clean_quotes, columns=['Quotes', 'Authors'])
+    df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
+
+    concat_df = pd.concat([source_df, df_filtered])
+    concat_df.drop_duplicates(subset=['Quotes'], inplace=True, keep='last')
+    # Test
+    print(source_df)
+    print(df_filtered.to_string())
+    print(concat_df)
+
     # with open(destination_file, 'w') as f:
     #     pass
-
-
-# Tests
-new_fortunes(fortune2dataframe('zen'), None)
 
 
 ##############################################################################
 #                                Variables                                   #
 ##############################################################################
+
 
 # Twitter Variables
 API_Key = os.environ.get('TWTR_API_KEY')
@@ -154,9 +165,8 @@ body_html_failed = f"""<!DOCTYPE html>
 
 if __name__ == "__main__":
 
-    for n in twtr_bot(API_Key, API_Secret_Key, AccessToken,
-                      AccessTokenSecret, usernames_list):
-        print(n)
+    new_fortunes(fortune2dataframe('zen'), twtr_bot(API_Key, API_Secret_Key, AccessToken,
+                                                    AccessTokenSecret, usernames_list))
 
 # In order to send or not the email, we can check if new data has been appended ?
 #     send_email(from_addr, gmail_key, to_addrs,
@@ -169,12 +179,12 @@ if __name__ == "__main__":
 # Checkpoints
 # X 1/ Check the text from that username 's twitter
 # 2/ Clean & Standardize the tweet txt data
-#       a/ remove quotation marks (All kind)
-#       b/ remove '\n'
-#       c/ IGNORE data containing "https://" > Thoses data are useless, quote isn't completed
-#       d/ remove unwanted caracters, trailing symboles
-#       e/ Split quote/author
+#       X a/ remove quotation marks (All kind)
+#       X b/ remove '\n'
+#       X c/ IGNORE data containing "https://" > Thoses data are useless, quote isn't completed
+#       ~ d/ remove unwanted caracters, trailing symboles
+#       X e/ Split quote/author
 # X 3/ Download zen fortunes data from source file >> Use Pandas
-# 4/ Check if new quote already exist in my DB (DB from n° 3)
-# 5/ Append the DB
+# X 4/ Check if new quote already exist in my DB (DB from n° 3)
+# X 5/ Append the DB
 # 6/ Export/Write DB into destination file zen_fortunes 'zen'

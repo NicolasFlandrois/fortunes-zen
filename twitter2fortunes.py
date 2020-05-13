@@ -7,6 +7,7 @@ import smtplib
 from email.message import EmailMessage
 from datetime import datetime as dt
 import pandas as pd
+import numpy as np
 import tweepy
 
 # print(f'\nTime :\t{dt.now()}\n\nTwitter Script starting. Please wait.')
@@ -75,35 +76,45 @@ def fortune2dataframe(source_file):
         return df
 
 
-def new_fortunes(source_dataframe, tweet_input: list):
+def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     """This function will use Pandas module. Given a database and
     a list of input, as arguments. Then it will parse and standardize the input,
     before comparing if the same input already exist in the database.
     The format Used here is specific for a specific source, from '@ZenProverbs'
     twitter Zen quotation bot."""
+
+    # Setting  source dataframe
     source_df = source_dataframe
 
-    new_data = tweet_input
-    clean_quotes = [item.replace('"', '').replace(
+    # Managing New Data
+    new_df = pd.DataFrame([item.replace('"', '').replace(
         'ﾟ', '').replace('\n', '').replace(
-        '#', "- ").strip().split('      — ') for item in new_data]
-    new_df = pd.DataFrame(clean_quotes, columns=['Quotes', 'Authors'])
+        '#', "- ").strip().split('      — ') for item in tweet_input], columns=['Quotes', 'Authors'])
     df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
 
+    # Concatenate both dtatframes (Source + New_clean) & Purge Duplicates
     concat_df = pd.concat([source_df, df_filtered])
-    concat_df.drop_duplicates(subset=['Quotes'], inplace=True, keep='last')
-    # Test
-    print(source_df)
-    print(df_filtered.to_string())
-    print(concat_df)
+    concat_df.drop_duplicates(
+        subset=['Quotes'], inplace=True, keep='last')
 
-    # with open(destination_file, 'w') as f:
-    #     pass
+    # Export to txt fortunes format file
+    quotes_string = "\n%\n".join([
+        f'{n[0]}\n\n      — {n[1]}' for n in concat_df.values.tolist()])
+    # output_string = f'%\n{quotes_string}\n%'
+
+    with open(output_file_name, "w") as f:
+        f.write(f'%\n{quotes_string}\n%')
+
+    concat_rows = concat_df['Quotes'].count()
+    source_rows = source_df['Quotes'].count()
+
+    return int(concat_rows - source_rows)
 
 
 ##############################################################################
 #                                Variables                                   #
 ##############################################################################
+
 
 
 # Twitter Variables
@@ -122,7 +133,7 @@ gmail_key = os.environ.get('EMAIL_PASS')
 to_addrs = from_addr
 
 # Succeed
-subject_success = f'Twitter Bot - SUCCESS - \
+subject_success = f'Zen Fortunes Compile Bot - UPDATED - \
 {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}'
 
 msg_success = f"""This email was automatically sent by your Twitter bot.
@@ -130,29 +141,19 @@ Your Twitter Account Successfully liked your favorit twitter-friends.
 {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}
 """
 
-body_html_success = f"""<!DOCTYPE html>
-<html>
-    <body>
-        <h1 style="color:SlateGray;">Your Twitter Account Successfully liked your favorit twitter-friends.</h1>
-        <p>This email was automatically sent by your Twitter bot.</p>
-        <p>Your Twitter-bot is setup to like the last 20 tweets not liked yet, from each friend's account in your list.</p>
-        <p>The Twitter bot last worked on {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}.</p>
-    </body>
-</html>"""
-
 # Failed
-subject_failed = f'Twitter Bot - FAILED - \
+subject_failed = f'Zen Fortunes Compile Bot - NO UPDATES - \
 {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}'
 
 msg_failed = f"""This email was automatically sent by your Twitter bot.
-Your Twitter Account failed to like your favorit twitter-friends.
+No New Tweets were append to your database.
 {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}
 """
 
 body_html_failed = f"""<!DOCTYPE html>
 <html>
     <body>
-        <h1 style="color:SlateGray;">Your Twitter Account <b>FAILED</b> to like your favorit twitter-friends.</h1>
+        <h1 style="color:SlateGray;">The update <b>FAILED</b> to append new quotes.</h1>
         <p>This email was automatically sent by your Twitter bot.</p>
         <p>The Twitter bot last worked on {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}.</p>
     </body>
@@ -165,26 +166,22 @@ body_html_failed = f"""<!DOCTYPE html>
 
 if __name__ == "__main__":
 
-    new_fortunes(fortune2dataframe('zen'), twtr_bot(API_Key, API_Secret_Key, AccessToken,
-                                                    AccessTokenSecret, usernames_list))
+    delta = new_fortunes(fortune2dataframe('zen'), twtr_bot(API_Key, API_Secret_Key, AccessToken,
+                                                             AccessTokenSecret, usernames_list), 'zen')
 
-# In order to send or not the email, we can check if new data has been appended ?
-#     send_email(from_addr, gmail_key, to_addrs,
-#                subject_success, msg_success, body_html_success)
-# else:
-#     send_email(from_addr, gmail_key, to_addrs,
-#                subject_failed, msg_failed, body_html_failed)
+    if delta == 0:
+        send_email(from_addr, gmail_key, to_addrs,
+                   subject_failed, msg_failed, body_html_failed)
+    else:
+        body_html_success = f"""<!DOCTYPE html>
+<html>
+    <body>
+        <h1 style="color:SlateGray;">Your Zen_Fortune auto update bot successfully updated {delta} new quotes.</p>
+        <p>Your Twitter-bot is setup to check and update the last 20 tweets written, from each twitter target's account in your list.</p>
+        <p>Target Account: {usernames_list}
+        <p>This Twitter bot last worked on {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}.</p>
+    </body>
+</html>"""
 
-##############################################################################
-# Checkpoints
-# X 1/ Check the text from that username 's twitter
-# 2/ Clean & Standardize the tweet txt data
-#       X a/ remove quotation marks (All kind)
-#       X b/ remove '\n'
-#       X c/ IGNORE data containing "https://" > Thoses data are useless, quote isn't completed
-#       ~ d/ remove unwanted caracters, trailing symboles
-#       X e/ Split quote/author
-# X 3/ Download zen fortunes data from source file >> Use Pandas
-# X 4/ Check if new quote already exist in my DB (DB from n° 3)
-# X 5/ Append the DB
-# 6/ Export/Write DB into destination file zen_fortunes 'zen'
+        send_email(from_addr, gmail_key, to_addrs,
+                   subject_success, msg_success, body_html_success)

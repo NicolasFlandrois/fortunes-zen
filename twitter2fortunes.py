@@ -69,7 +69,7 @@ def fortune2dataframe(source_file):
         data = f.read()
         quote_list = data.replace('\n', '').split('%')
         clean_list = [x.strip() for x in quote_list if x]
-        splited_quotes = [n.split('    — ') for n in clean_list]
+        splited_quotes = [n.split('     — ') for n in clean_list]
 
         df = pd.DataFrame(splited_quotes, columns=['Quotes', 'Authors'])
 
@@ -89,7 +89,7 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     # Managing New Data
     new_df = pd.DataFrame([item.replace('"', '').replace(
         'ﾟ', '').replace('\n', '').replace(
-        '#', "- ").strip().split('      — ') for item in tweet_input], columns=['Quotes', 'Authors'])
+        '#', "- ").strip().split('     — ') for item in tweet_input], columns=['Quotes', 'Authors'])
     df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
 
     # Concatenate both dtatframes (Source + New_clean) & Purge Duplicates
@@ -99,7 +99,7 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
 
     # Export to txt fortunes format file
     quotes_string = "\n%\n".join([
-        f'{n[0]}\n\n      — {n[1]}' for n in concat_df.values.tolist()])
+        f'{n[0]}\n\n     — {n[1]}' for n in concat_df.values.tolist()])
     # output_string = f'%\n{quotes_string}\n%'
 
     with open(output_file_name, "w") as f:
@@ -167,7 +167,7 @@ body_html_failed = f"""<!DOCTYPE html>
 if __name__ == "__main__":
 
     delta = new_fortunes(fortune2dataframe('zen'), twtr_bot(API_Key, API_Secret_Key, AccessToken,
-                                                             AccessTokenSecret, usernames_list), 'zen')
+                                                            AccessTokenSecret, usernames_list), 'zen')
 
     if delta == 0:
         send_email(from_addr, gmail_key, to_addrs,

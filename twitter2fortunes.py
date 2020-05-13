@@ -86,20 +86,21 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     source_df = source_dataframe
 
     # Managing New Data
+    clean_hashtag = [item.split('#')[0] for item in tweet_input]  # Removing twiter plague of #Hashtags
     new_df = pd.DataFrame([item.replace('"', '').replace(
-        'ﾟ', '').replace('\n', '').replace(
-        '#', "- ").strip().split('     — ') for item in tweet_input], columns=['Quotes', 'Authors'])
+        'ﾟ', '').replace('\n', '').strip().split(
+        '     — ') for item in clean_hashtag], columns=['Quotes', 'Authors'])
+    # Discard data containing string 'https://', as that tweet isn't usable.
     df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
 
     # Concatenate both dtatframes (Source + New_clean) & Purge Duplicates
     concat_df = pd.concat([source_df, df_filtered])
     concat_df.drop_duplicates(
-        subset=['Quotes'], inplace=True, keep='last')
+        subset=['Quotes'], inplace=True, keep=False)
 
     # Export to txt fortunes format file
     quotes_string = "\n%\n".join([
         f'{n[0]}\n\n     — {n[1]}' for n in concat_df.values.tolist()])
-    # output_string = f'%\n{quotes_string}\n%'
 
     with open(output_file_name, "w") as f:
         f.write(f'%\n{quotes_string}\n%')

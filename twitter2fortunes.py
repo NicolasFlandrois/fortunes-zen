@@ -7,7 +7,6 @@ import smtplib
 from email.message import EmailMessage
 from datetime import datetime as dt
 import pandas as pd
-import numpy as np
 import tweepy
 
 # print(f'\nTime :\t{dt.now()}\n\nTwitter Script starting. Please wait.')

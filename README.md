@@ -82,7 +82,7 @@ To edit the crontab, from your terminal: `crontab -e`
 
 Advised Cron Job setting:
 
-    Database updates every day at midnight.
+    Database updates everyday at midnight.
 
     Add (copy & paste) the following line in your crontab:
 

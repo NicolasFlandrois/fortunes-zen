@@ -78,11 +78,9 @@ I created this bot in order to be ***cron* job** friendly.
 
 However, if you want to use this bot in a cron job, the environment variables are not recognised as if you launch this script in your terminal. I would advise, in *production*, to update this file with your ***real** variables* in place. *(If you know how to set a cron job to use environment variables, or where to set env. var. for cron job... Pleas tell me!)* Or you can set and import your variables from a json file.
 
+To edit the crontab, from your terminal: `crontab -e`
+
 Advised Cron Job setting:
-
-    To edit the crontab, from your terminal:
-
-        `crontab -e`
 
     Add (copy & paste) the following line in your crontab:
 

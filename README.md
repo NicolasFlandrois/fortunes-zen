@@ -74,6 +74,30 @@ As I sourced all my quotes from a single source, with possible access through an
 The `twitter2fortunes.py` script will automate the update for me.
 It will fetch the new quotes, clean the data, compare and purge duplicates, and update the `zen` text file and the `zen.dat` file.
 
+I created this bot in order to be ***cron* job** friendly.
+
+However, if you want to use this bot in a cron job, the environment variables are not recognised as if you launch this script in your terminal. I would advise, in *production*, to update this file with your ***real** variables* in place. *(If you know how to set a cron job to use environment variables, or where to set env. var. for cron job... Pleas tell me!)* Or you can set and import your variables from a json file.
+
+Advised Cron Job setting:
+
+    To edit the crontab, from your terminal:
+
+        `crontab -e`
+
+    Add (copy & paste) the following line in your crontab:
+
+        # ┌───────────── minute (0 - 59)
+        # │ ┌───────────── hour (0 - 23)
+        # │ │ ┌───────────── day of month (1 - 31)
+        # │ │ │ ┌───────────── month (1 - 12)
+        # │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
+        # │ │ │ │ │                                       7 is also Sunday on some systems)
+        # │ │ │ │ │
+        # │ │ │ │ │
+        # * * * * *  command_to_execute
+        # m h  dom mon dow   command
+        0 0 * * * /usr/bin/python3 /home/<your-username-here>/zen/twitter2fortunes.py
+
 -------------------------------------
 # Jupiter Notebook - Checkup and Overview
 

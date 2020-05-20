@@ -162,7 +162,7 @@ body_html_failed = f"""<!DOCTYPE html>
 </html>"""
 
 # Source File - Data text file in fortune-mod format
-source_file = 'zen'
+source_file_name = 'zen'
 
 ##############################################################################
 #                              End of Variables                              #
@@ -171,8 +171,11 @@ source_file = 'zen'
 
 if __name__ == "__main__":
 
-    delta = new_fortunes(fortune2dataframe(source_file), twtr_bot(API_Key, API_Secret_Key, AccessToken,
-                                                                  AccessTokenSecret, usernames_list), source_file)
+    delta = new_fortunes(
+        fortune2dataframe(os.path.abspath(source_file_name)),
+        twtr_bot(API_Key, API_Secret_Key, AccessToken,
+                 AccessTokenSecret, usernames_list),
+        os.path.abspath(source_file_name))
 
     if delta[0] == 0:
         send_email(from_addr, gmail_key, to_addrs,
@@ -195,4 +198,4 @@ if __name__ == "__main__":
         send_email(from_addr, gmail_key, to_addrs,
                    subject_success, msg_success, body_html_success)
 
-    os.system(f'strfile {source_file}')
+    os.system(f'strfile {os.path.abspath(source_file_name)}')

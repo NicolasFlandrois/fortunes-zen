@@ -15,6 +15,10 @@ The usages of this mini program lawfully engages the user's responsability, only
 This program is intended for private uses.
 
 ----------------------------
+
+![](.zen_tux.png)
+
+----------------------------
 # Installation
 
 1. Clone this repository.

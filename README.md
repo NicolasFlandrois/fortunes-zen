@@ -18,36 +18,6 @@ This program is intended for private uses.
 
 ![](.zen_tux.png)
 
- _____________________________________
-
-/ Never underestimate your potential. \
-
-| Buddha nature is always there.      |
-
-|                                     |
-
-\ — Chamtrul Rinpoche                 /
-
- -------------------------------------
-
-   \\
-
-    \\
-
-        .--.
-
-       |o_o |
-
-       |:_/ |
-
-      //   \ \\
-
-     (|     | )
-
-    /'\\\_   _/`\
-
-    \___)=(___/
-
 ----------------------------
 # Installation
 

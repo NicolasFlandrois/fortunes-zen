@@ -110,7 +110,7 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     concat_rows = int(concat_df['Quotes'].count())
     source_rows = int(source_df['Quotes'].count())
 
-    return int(concat_rows - source_rows)
+    return int(concat_rows - source_rows), concat_rows
 
 
 ##############################################################################
@@ -181,7 +181,11 @@ if __name__ == "__main__":
         body_html_success = f"""<!DOCTYPE html>
 <html>
     <body>
-        <h1 style="color:SlateGray;">Your Zen_Fortune auto update bot successfully updated {delta} new quotes.</p>
+        <h1 style="color:SlateGray;">
+        Your Zen_Fortune auto update bot successfully updated {delta[0]} new quotes.
+        </h1>
+
+        <p>Your Quotes Database is now: {delta[1]} Zen Quotes.</p>
         <p>Your Twitter-bot is setup to check and update the last 20 tweets written, from each twitter target's account in your list.</p>
         <p>Target Account: {usernames_list}
         <p>This Twitter bot last worked on {dt.now().strftime("%A, %d. %B %Y %I:%M%p")}.</p>

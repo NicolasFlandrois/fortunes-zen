@@ -73,3 +73,18 @@ This program is intended for private uses.
 As I sourced all my quotes from a single source, with possible access through an API, I created a bot.
 The `twitter2fortunes.py` script will automate the update for me.
 It will fetch the new quotes, clean the data, compare and purge duplicates, and update the `zen` text file and the `zen.dat` file.
+
+-------------------------------------
+# Jupiter Notebook - Checkup and Overview
+
+You may also use the Jupiter Notebook available in this repository.
+
+If you use the automated bot mentioned above, this J-notebook allows you to check for any anomalies, and pin-point their locations to you.
+
+Otherwise, it will give you a basic Overview:
+
+    - Sampling the database
+
+    - The number of Quotes
+
+    - Which Author has been the most quoted

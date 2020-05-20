@@ -174,7 +174,7 @@ if __name__ == "__main__":
     delta = new_fortunes(fortune2dataframe(source_file), twtr_bot(API_Key, API_Secret_Key, AccessToken,
                                                                   AccessTokenSecret, usernames_list), source_file)
 
-    if delta == 0:
+    if delta[0] == 0:
         send_email(from_addr, gmail_key, to_addrs,
                    subject_failed, msg_failed, body_html_failed)
     else:

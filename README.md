@@ -16,7 +16,7 @@ This program is intended for private uses.
 
 ----------------------------
 
-![](.zen_tux.png)
+![](.zen_tux.png?raw=true)
 
 ----------------------------
 # Installation

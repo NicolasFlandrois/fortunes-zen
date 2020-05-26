@@ -54,6 +54,7 @@ def twtr_bot(API_Key, API_Secret_Key, AccessToken, AccessTokenSecret, usernames_
         for tweet in tmpTweets:
             try:
                 twt_txt.append(tweet.text)
+                tweet.favorite()
 
             except:
                 pass

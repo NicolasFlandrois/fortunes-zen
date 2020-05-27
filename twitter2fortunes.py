@@ -91,8 +91,10 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
     # Removing twiter plague of #Hashtags
     clean_hashtag = [item.split('#')[0] for item in tweet_input]
     new_df = pd.DataFrame([item.replace('"', '').replace(
-        'ﾟ', '').replace('\n', '').strip().split(
-        '     — ') for item in clean_hashtag], columns=['Quotes', 'Authors'])
+        'ﾟ', '').replace('\n', ' ').replace('||□∧◯', '').replace(
+        '^', '').replace('|❧|', '').replace('||', '').replace(
+        '| | □∧◯', '').replace('| ❧ |', '').replace('| |', '').strip().split(
+        ' — ') for item in clean_hashtag], columns=['Quotes', 'Authors'])
     # Discard data containing string 'https://', as that tweet isn't usable.
     df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
 
@@ -127,7 +129,8 @@ API_Secret_Key = os.environ.get('TWTR_API_SECRET_KEY')
 AccessToken = os.environ.get('TWTR_ACCESS_TOKEN')
 AccessTokenSecret = os.environ.get('TWTR_ACCESS_TOKEN_SECRET')
 
-usernames_list = ['@ZenProverbs']
+usernames_list = ['@ZenProverbs', '@FindYourSilence',
+                  '@ZenEssentials', '@WuWeiMaster']
 
 # Email Variables
 from_addr = os.environ.get('EMAIL_USER')

@@ -1,13 +1,15 @@
 # fortunes-zen
 [English] Compilation of zen quotes, set up to use in fortune-mod
 
+![](.zen_tux.png?raw=true)
+
 ************************
 
 This small project sets to customize a quotes database for the application [fortune-mod (cf wikipage)](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), providing fortune cookies on demand.
 Fortune program returns a random quote from a given database, and allows its users to add up new database.
 
 -------------------------
-## ***Copyghts Diclaimer:***
+## ***Copyrights Diclaimer:***
 This project is under **MIT Licencing 2020**. Non Profits.
 
 The usages of this mini program lawfully engages the user's responsability, only.
@@ -15,23 +17,25 @@ The usages of this mini program lawfully engages the user's responsability, only
 This program is intended for private uses.
 
 ----------------------------
-
-![](.zen_tux.png?raw=true)
-
-----------------------------
 # Installation
 
 1. Clone this repository.
 
-    `git clone https://github.com/NicolasFlandrois/fortunes-zen.git`
+    ```bash
+    git clone https://github.com/NicolasFlandrois/fortunes-zen.git
+    ```
 
 2. Paste this 2 files (*zen* and *zen.dat*) in following fortunes directory (Unix/Linux files system here):
 
-    `/usr/share/games/fortunes`
+    ```bash
+    /usr/share/games/fortunes
+    ```
 
 3. Run your fortune application with zen
 
-    `fortune zen`
+    ```bash
+    fortune zen
+    ```
 
 -------------------------------------
 # How to customize your own database
@@ -40,7 +44,9 @@ This program is intended for private uses.
 
     (Unix/Linux)
 
-    `touch my_zen_quotes`
+    ```bash
+    touch my_zen_quotes
+    ```
 
 2. Edit this file with your new quotes. Use the text editeur of your choice. Each quotes must be contained in between 2 % symboles.
 
@@ -65,9 +71,11 @@ This program is intended for private uses.
 
     (Unix/Linux)
 
-    `strfile my_zen_quotes`
+    ```bash
+    strfile my_zen_quotes
+    ```
 
-    The output file will be *my_zen_quotes.dat*
+    The output file will be `my_zen_quotes.dat`
 
 5. Then repeate steps in installation section.
 
@@ -111,8 +119,8 @@ If you use the automated bot mentioned above, this J-notebook allows you to chec
 
 Otherwise, it will give you a basic Overview:
 
-    - Sampling the database
+- Sampling the database
 
-    - The number of Quotes
+- The number of Quotes
 
-    - Which Author has been the most quoted
+- Which Author has been the most quoted

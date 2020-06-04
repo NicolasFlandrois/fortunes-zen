@@ -96,7 +96,7 @@ def new_fortunes(source_dataframe, tweet_input: list, output_file_name):
         '| | □∧◯', '').replace('| ❧ |', '').replace('| |', '').strip().split(
         ' — ') for item in clean_hashtag], columns=['Quotes', 'Authors'])
     # Discard data containing string 'https://', as that tweet isn't usable.
-    df_filtered = new_df[~new_df['Quotes'].str.contains('https://')]
+    df_filtered = new_df[~new_df['Quotes'].str.contains('http')]
 
     # Concatenate both dtatframes (Source + New_clean) & Purge Duplicates
     concat_df = pd.concat([source_df, df_filtered])

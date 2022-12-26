@@ -77,6 +77,8 @@ This program is intended for private uses.
 
     The output file will be `my_zen_quotes.dat`
 
+    > This command line tool is dependent from `fortune-mod` tool; which you'd also need to run `fortune zen` anyway. (Install with: `sudo apt install fortune-mod`)
+
 5. Then repeate steps in installation section.
 
 -------------------------------------
